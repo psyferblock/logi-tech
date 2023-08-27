@@ -17,7 +17,7 @@ async function addProduct(formData: FormData) {
   const price = Number(formData.get("price") || 0);
 
   console.log("formData", formData.keys());
-  console.log('formData.values(', formData.values())
+  console.log("formData.values(", formData.values());
 
   if (!name || !description || !imageUrl || !price) {
     throw Error("missing required credentials");
@@ -27,7 +27,6 @@ async function addProduct(formData: FormData) {
     data: { name, description, imageUrl, price },
   });
   redirect("/");
-
 }
 function AddProductPage() {
   return (
@@ -60,9 +59,9 @@ function AddProductPage() {
           type="number"
           className="input-bordered input mb-3 w-full"
         />
-        <FormSubmitbutton 
-        className={"btn-primary btn-block btn"} type={"submit"}
-        >AddProduct</FormSubmitbutton>
+        <FormSubmitbutton className={" btn-block "} type={"submit"}>
+          AddProduct
+        </FormSubmitbutton>
       </form>
     </div>
   );
