@@ -1,6 +1,5 @@
 import './globals.css'
 import type { Metadata } from 'next'
-// import SessionProvider from "./SessionProvider"
 import { Inter } from 'next/font/google'
 
 
@@ -21,10 +20,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-     {/* <SessionProvider> */}
       <body className={inter.className}>{children}
       </body>
-      {/* </SessionProvider>  */}
     </html>
 
   )
