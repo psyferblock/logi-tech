@@ -3,13 +3,13 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <main className="w-max ">
-     <div className=" flex space-between m-3">
+    <main className="w-screen">
+     <div className=" flex justify-items-end m-3">
        <div > logo</div>
-       <ul>
+       <ul className="flex justify-between">
         <li><Link href="#">  about</Link></li>
         <li><Link href="#">  our offering </Link></li>
-        <li><Link href="#">  set up my busing </Link></li>
+        <li><Link href="#">  set up my busing </Link></li>  
 
         
        </ul>
