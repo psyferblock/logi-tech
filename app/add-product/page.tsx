@@ -1,5 +1,7 @@
-import { prisma } from "@/src/db/prisma";
+import FormSubmitbutton from "@/components/FormSubmitbutton";
+import { prisma } from "@/lib/db/prisma";
 import { redirect } from "next/navigation";
+import { type } from "os";
 import React from "react";
 
 export const metadata = {
@@ -58,7 +60,9 @@ function AddProductPage() {
           type="number"
           className="input-bordered input mb-3 w-full"
         />
-        <button className="btn btn-primary btn-block">Submit</button>
+        <FormSubmitbutton 
+        className={"btn-primary btn-block btn"} type={"submit"}
+        >AddProduct</FormSubmitbutton>
       </form>
     </div>
   );
