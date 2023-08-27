@@ -1,6 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import SessionProvider from "./SessionProvider"
+// import SessionProvider from "./SessionProvider"
 import { Inter } from 'next/font/google'
 
 
