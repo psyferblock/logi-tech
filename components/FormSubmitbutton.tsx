@@ -19,7 +19,7 @@ function FormSubmitbutton({
   
   // the useFormStatus hook automatically hooks to the parent form of the submit button. it gives us a few values
   // pending is the loading state.
-  const { pending } = useFormStatus();
+  const { pending,} = useFormStatus();
   return (
     <button
       className={`${className} btn btn-primary`}
