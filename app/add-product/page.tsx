@@ -1,6 +1,6 @@
 import FormSubmitbutton from "@/components/FormSubmitbutton";
 import { prisma } from "@/lib/db/prisma";
-import { redirect } from "next/navigation";
+import { redirect ,} from "next/navigation";
 import { type } from "os";
 import React from "react";
 
@@ -26,7 +26,7 @@ async function addProduct(formData: FormData) {
   await prisma.product.create({
     data: { name, description, imageUrl, price },
   });
-  redirect("/");
+  // redirect("/");
 }
 function AddProductPage() {
   return (
