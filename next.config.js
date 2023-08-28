@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images:{
-        remotePatterns:[{hostname:"unsplash.com"}]
+        remotePatterns:[{hostname:"images.unsplash.com"}]
     },
     experimental: {
         serverActions: true,

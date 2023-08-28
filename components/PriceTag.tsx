@@ -3,7 +3,7 @@ import React from 'react'
 
 interface PriceTagPropsInterface {
     price:number,
-    className:string
+    className?:string
 }
 function PriceTag({price,className}:PriceTagPropsInterface) {
 
