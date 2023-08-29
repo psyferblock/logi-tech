@@ -12,6 +12,7 @@ interface ProductPagePropsInterface {
 }
 
 // the below function caches the information that we want
+
 const getProduct = cache(async (id: string) => {
   const product = await prisma.product.findUnique({ where: { id } });
   // this redirects us to the not found page
@@ -19,10 +20,11 @@ const getProduct = cache(async (id: string) => {
   return product;
 });
 
-// this is an async function because we will have to fetch the data from the database seperately from the page function
+// the generateMetadata  function ( this is how its supposed to be written) will give us dynamic metadata and fetch the data from the database seperately from the page function
 // the metadata we have because we want it to be dynamic is writteen in a function in order to be able to fetch the data based on the id dynamically
 // iot makes sense since we cant share data from the page function to another function no????
-export async function generateMetaData({
+
+export async function generateMetadata({
   params: { id },
 }: ProductPagePropsInterface): Promise<Metadata> {
   // if we use the fetch function for to get data from the api then the data is cached and deduplicated where ever needed on the file. which means calling the data twice will very much be calling the data to cache and then sending it to the places it needs to be
