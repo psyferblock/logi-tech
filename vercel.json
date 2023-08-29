@@ -1,4 +1,4 @@
-{
-    source: '/internet',
-    destination: 'https://tools.ietf.org/html/rfc3271'
-  }
+// {
+//     source: '/internet',
+//     destination: 'https://tools.ietf.org/html/rfc3271'
+//   }
