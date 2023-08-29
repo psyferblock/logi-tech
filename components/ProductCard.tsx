@@ -14,8 +14,8 @@ function ProductCard({ product }: ProductCardPropsInterface) {
   return (
     <div>
       <Link
-        href={"/products/" + product.id}
-        className="cardn w-full bg-base-100 hover:shadow-xl transition-shadow"
+        href={"/product/" + product.id}
+        className="card w-full bg-base-100 hover:shadow-xl transition-shadow"
       >
         {/* // figure is from the daisy ui docs  */}
         <figure>

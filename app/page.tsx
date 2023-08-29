@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db/prisma";
 import Image from "next/image";
 import Link from "next/link";
 
+
+
 export default async function Home() {
   const products = await prisma.product.findMany({
     orderBy: { id: "desc" },
@@ -23,7 +25,7 @@ export default async function Home() {
             <h1 className="text-5xl font-bold ">{products[0].name}</h1>
             <h2 className="py-6 ">{products[0].description}</h2>
             <Link
-              href={"/products/" + products[0].id}
+              href={"/product/" + products[0].id}
               className="btn-primary btn"
             >
               check it out{" "}
