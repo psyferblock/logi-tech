@@ -21,6 +21,7 @@ const getProduct = cache(async (id: string) => {
 });
 
 // the generateMetadata  function ( this is how its supposed to be written) will give us dynamic metadata and fetch the data from the database seperately from the page function
+// generateMetadata is only accessible in server components.  and next js will wait for it to vcomplete before it goes through the rest of the page. 
 // the metadata we have because we want it to be dynamic is writteen in a function in order to be able to fetch the data based on the id dynamically
 // iot makes sense since we cant share data from the page function to another function no????
 
