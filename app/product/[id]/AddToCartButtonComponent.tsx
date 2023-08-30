@@ -1,17 +1,28 @@
 // logic behind this button is client side. so we have the page which is server but the button which is client side where we get the functionality of react from it without interfering with server data and functionality
 "use client";
 
-import React from "react";
+import React, { useState, useTransition } from "react";
 
 interface AddToCartButtonPropsInterface {
   productId: string;
+  //the  type of the function prop which adds the product to cart.
+  incrementProductQuantity: (productId: string) => Promise<void>;
 }
 function AddToCartButtonComponent({
   productId,
+  incrementProductQuantity,
 }: AddToCartButtonPropsInterface) {
+  const [isPending, startTransition] = useTransition(); //its normal use is not to block the ui in state updates.
+  const [success, setSuccess] = useState(false); 
   return (
     <div className="flex items-center gap-2">
-      <button className="btn btn-primary" onClick={() => {}}>
+      <button className="btn btn-primary" onClick={() => {
+        setSuccess(false);
+        startTransition(async ()=> {
+          await incrementProductQuantity(productId)
+          setSuccess(true)
+        })
+      }}>
         Add to Cart
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -28,6 +39,9 @@ function AddToCartButtonComponent({
           />
         </svg>
       </button>
+      {isPending&& <span className="loading loading-spinner loading-md"/>}
+      {!isPending&& success && (<span className="text-success"> Added To Cart.</span>)}
+
     </div>
   );
 }
