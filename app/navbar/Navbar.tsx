@@ -4,6 +4,7 @@ import logo from "@/assets/logo.png";
 import { prisma } from "@/lib/db/prisma";
 import { redirect } from "next/navigation";
 import ShoppingCartButton from "./ShoppingCartButton";
+import { getCart } from "@/lib/db/cart";
 
 async function searchProducts(formData: FormData) {
   "use server";
@@ -15,7 +16,7 @@ async function searchProducts(formData: FormData) {
 }
 
 //
-export default function Navbar() {
+export default  async function Navbar() {
     const cart =await getCart()
 
   return (
