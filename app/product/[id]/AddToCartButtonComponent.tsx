@@ -13,16 +13,19 @@ function AddToCartButtonComponent({
   incrementProductQuantity,
 }: AddToCartButtonPropsInterface) {
   const [isPending, startTransition] = useTransition(); //its normal use is not to block the ui in state updates.
-  const [success, setSuccess] = useState(false); 
+  const [success, setSuccess] = useState(false);
   return (
     <div className="flex items-center gap-2">
-      <button className="btn btn-primary" onClick={() => {
-        setSuccess(false);
-        startTransition(async ()=> {
-          await incrementProductQuantity(productId)
-          setSuccess(true)
-        })
-      }}>
+      <button
+        className="btn btn-primary"
+        onClick={() => {
+          setSuccess(false);
+          startTransition(async () => {
+            await incrementProductQuantity(productId);
+            setSuccess(true);
+          });
+        }}
+      >
         Add to Cart
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -39,9 +42,10 @@ function AddToCartButtonComponent({
           />
         </svg>
       </button>
-      {isPending&& <span className="loading loading-spinner loading-md"/>}
-      {!isPending&& success && (<span className="text-success"> Added To Cart.</span>)}
-
+      {isPending && <span className="loading loading-spinner loading-md" />}
+      {!isPending && success && (
+        <span className="text-success"> Added To Cart.</span>
+      )}
     </div>
   );
 }
