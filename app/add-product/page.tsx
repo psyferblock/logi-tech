@@ -1,12 +1,14 @@
 import FormSubmitbutton from "@/components/FormSubmitbutton";
 import { prisma } from "@/lib/db/prisma";
-import { redirect ,} from "next/navigation";
+import { redirect } from "next/navigation";
 import { type } from "os";
 import React from "react";
+import FinishButtonComponent from "./FinishButtonComponent";
 
 export const metadata = {
   title: "Add Product Logi-Tech",
 };
+
 
 // add product function
 async function addProduct(formData: FormData) {
@@ -26,7 +28,8 @@ async function addProduct(formData: FormData) {
   await prisma.product.create({
     data: { name, description, imageUrl, price },
   });
-  // redirect("/");
+  redirect("/add-product");
+  
 }
 function AddProductPage() {
   return (
@@ -62,6 +65,7 @@ function AddProductPage() {
         <FormSubmitbutton className={" btn-block "} type={"submit"}>
           AddProduct
         </FormSubmitbutton>
+        {/* <FinishButtonComponent/> */}
       </form>
     </div>
   );

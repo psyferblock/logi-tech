@@ -1,18 +1,19 @@
-// logic behind this button is client side. so we have the page which is server but the button which is client side where we get the functionality of react from it without interfering with server data and functionality 
-"use client"
+// logic behind this button is client side. so we have the page which is server but the button which is client side where we get the functionality of react from it without interfering with server data and functionality
+"use client";
 
-import React from 'react'
+import React from "react";
 
-interface AddToCartButtonPropsInterface{
-    productId:string
+interface AddToCartButtonPropsInterface {
+  productId: string;
 }
-function AddToCartButtonComponent({productId}:AddToCartButtonPropsInterface) {
+function AddToCartButtonComponent({
+  productId,
+}: AddToCartButtonPropsInterface) {
   return (
-    <div className='flex items-center gap-2'>
-        <button  className='btn btn-primary'
-        onClick={()=>{}}>
-            Add to Cart 
-            <svg
+    <div className="flex items-center gap-2">
+      <button className="btn btn-primary" onClick={() => {}}>
+        Add to Cart
+        <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-5 w-5"
           fill="none"
@@ -26,9 +27,9 @@ function AddToCartButtonComponent({productId}:AddToCartButtonPropsInterface) {
             d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
           />
         </svg>
-            </button >
-        </div>
-  )
+      </button>
+    </div>
+  );
 }
 
-export default AddToCartButtonComponent
+export default AddToCartButtonComponent;
