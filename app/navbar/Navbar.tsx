@@ -21,8 +21,8 @@ export default  async function Navbar() {
 
   return (
     <div className="bg-base-100">
-      <div className="navbar max-w-7xl m-auto flex-col sm:flex-row ">
-        <div className="flex-1">
+      <div className="navbar max-w-7xl m-auto flex-col sm:flex-row h-20">
+        <div className="flex-1 h-20">
           {/* flex-1 attributes define how the items dtretch over the available space on the nav bar  */}
           <Link href={"/"} className="btn btn-ghost text-xl normal-case">
             <Image src={logo} alt="logi-tech logo" height="40" width="40" />
