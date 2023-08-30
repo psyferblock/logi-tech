@@ -16,10 +16,17 @@ export type ShoppingCartType = cartWithProducts & {
   size: number;
   subtotal: number;
 };
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//GET CART FUNCTION 
 export async function getCart(): Promise<ShoppingCartType | null> {
+    // a simple way to do it but we wanted to store the cart in a cookie so we dont haver to keep requesting the data from server. 
   // const getCart=await prisma.cart.findUnique({
   //     id:id
-  // })
+  // }) 
+
+  // storing cart in cookie method 
   const localCartId = cookies().get("localCartId")?.value;
   const cart = localCartId
     ? await prisma.cart.findUnique({
@@ -46,6 +53,9 @@ export async function getCart(): Promise<ShoppingCartType | null> {
     ),
   };
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CREATE CART FUNCTION 
 export async function createCart():Promise<ShoppingCartType> {
   const newCart = await prisma.cart.create({
     data: {},
@@ -61,4 +71,15 @@ export async function createCart():Promise<ShoppingCartType> {
   }
 }
 
-//
+//logic of prisma and functionality creation in this file 
+// connecting the models in prisma we start with the id ( since its the cart id here ) from there we dive into the items and then the products hte items represent.
+// with that we understand what we will be getting.
+// after that we create the return of the cart which in this case the price and total number of items in the cart for that we use a reducer to perform the calculations
+// a reducer function takes 2 parameters an initial state and a function which takes the state and applies the functionality on it. 
+// reducer ((end state,initial state)=>{ here we write the functionality },0) /// above we wanted to add the items to calculate how many and their price to calculate how much. check the code please.
+
+// logic  of typescript.
+// the cart returns an object with information. so we have to create a type for hte object. 
+// prisma supports us with the models we created so it creates some types for us to utilise. 
+// the first type is extracted from Prisma itself where we add the return object itself and prisma makes the type for us . 
+//the second type "ShoppingCartType" adds to the previous type the object values we added.
