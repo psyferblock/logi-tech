@@ -12,15 +12,14 @@ interface cartEntryPropsInterface {
 function CartEntry({
   cartItem: { product, quantity },
 }: cartEntryPropsInterface) {
-
   // why JSX.ELEMENT? because we want to put an option tags which are HTML elements and we can put htem in a JSX  array but were going to do them in a loop
-  const quantityOptions:JSX.Element[] =[]
-  for(let i=1;i<99;i++){
+  const quantityOptions: JSX.Element[] = [];
+  for (let i = 1; i < 99; i++) {
     quantityOptions.push(
       <option key={i} value={i}>
         {i}
       </option>
-    )
+    );
   }
   return (
     <div>
@@ -32,6 +31,7 @@ function CartEntry({
           height={200}
           className="rounded-lg"
         />
+
         <div>
           <Link href={"products/" + product.id} className="font-bold">
             {product.name}
@@ -40,7 +40,14 @@ function CartEntry({
           <div> Price: {formatPrice(product.price)}</div>
           <div className="my-1 flex items-center gap-2">
             Quantity:
-            <select className="select-bordered select w-full max-w-[80px]">{quantityOptions}</select>
+            <select
+              className="select-bordered select w-full max-w-[80px] "
+              defaultValue={quantity}
+              // js is required for on change components which means we can only use it in a client component BUT WE CAN still call server actions in client components.
+              onChange={(e) => {}}
+            >
+              {quantityOptions}
+            </select>
           </div>
           <div className="flex items-center gap-3">
             Total: {formatPrice(product.price * quantity)}
