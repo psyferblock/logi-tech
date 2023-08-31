@@ -2,7 +2,7 @@
 import { Session } from "next-auth";
 import Image from "next/image";
 import React from "react";
-import profilePicPlaceholder from "@/assets/profile-pic-placeholder.png"
+import profilePicPlaceholder from "@/assets/profile-pic-placeholder.png";
 import { signIn, signOut } from "next-auth/react";
 
 // we want to show the currently logged in user in this user button
@@ -17,13 +17,13 @@ function UserMenuButton({ session }: UserMenuButtonPropsInterface) {
     <div className="dropdown dropdown-end">
       <label htmlFor="" tabIndex={0} className="btn btn-ghost btn-circle">
         {user ? (
-          <Image 
-          src={user?.image || profilePicPlaceholder}
-          alt="Profile Picture"
-          width={40}
-          height={40}
-          className="w-10 rounded-full "
-           />
+          <Image
+            src={user?.image || profilePicPlaceholder}
+            alt="Profile Picture"
+            width={40}
+            height={40}
+            className="w-10 rounded-full "
+          />
         ) : (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -40,13 +40,19 @@ function UserMenuButton({ session }: UserMenuButtonPropsInterface) {
           </svg>
         )}
       </label>
-      <ul tabIndex={0} className="dropdown-content menu rounded-box menu-sm z-30 mt-3 w-52 bg-base-100 p-2 shadow">
+      <ul
+        tabIndex={0}
+        className="dropdown-content menu rounded-box menu-sm z-30 mt-3 w-52 bg-base-100 p-2 shadow"
+      >
         <li>
-            {user?
-            <button onClick={()=>signOut({callbackUrl:"/"})}>Sign Out</button> :
-            <button onClick={()=>signIn()}>Sign In</button>}
+          {user ? (
+            <button onClick={() => signOut({ callbackUrl: "/" })}>
+              Sign Out
+            </button>
+          ) : (
+            <button onClick={() => signIn()}>Sign In</button>
+          )}
         </li>
-
       </ul>
     </div>
   );

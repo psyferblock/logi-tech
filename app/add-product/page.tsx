@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { type } from "os";
 import React from "react";
 import FinishButtonComponent from "./FinishButtonComponent";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
 export const metadata = {
   title: "Add Product Logi-Tech",
@@ -31,7 +33,12 @@ async function addProduct(formData: FormData) {
   redirect("/add-product");
   
 }
-function AddProductPage() {
+async function AddProductPage() {
+  const session = await getServerSession(authOptions)
+  if (!session){
+    // the question mark indicates wehre we want to  direct after signin. then we add = to send it to wehre we want after the callbackUrl is set.
+    redirect("api/auth/signin?callbackUrl=/add-product")
+  }
   return (
     <div>
       <h1 className="text-lg mb-3 font-bold ">Add Product</h1>
