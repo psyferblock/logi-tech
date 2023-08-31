@@ -2,7 +2,7 @@
 import { Session } from "next-auth";
 import Image from "next/image";
 import React from "react";
-import profilePicPlaceholder from "@/profile-pic-placeholder.png"
+import profilePicPlaceholder from "@/assets/profile-pic-placeholder.png"
 import { signIn, signOut } from "next-auth/react";
 
 // we want to show the currently logged in user in this user button

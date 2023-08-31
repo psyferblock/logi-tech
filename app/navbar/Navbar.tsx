@@ -5,6 +5,9 @@ import { prisma } from "@/lib/db/prisma";
 import { redirect } from "next/navigation";
 import ShoppingCartButton from "./ShoppingCartButton";
 import { getCart } from "@/lib/db/cart";
+import UserMenuButton from "./UserMenuButton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
 async function searchProducts(formData: FormData) {
   "use server";
@@ -16,8 +19,10 @@ async function searchProducts(formData: FormData) {
 }
 
 //
-export default  async function Navbar() {
-    const cart =await getCart()
+export default async function Navbar() {
+  // auth options are the ones we set up for next-auth
+  const session = await getServerSession(authOptions);
+  const cart = await getCart();
 
   return (
     <div className="bg-base-100">
@@ -25,7 +30,13 @@ export default  async function Navbar() {
         <div className="flex-1">
           {/* flex-1 attributes define how the items dtretch over the available space on the nav bar  */}
           <Link href={"/"} className="btn btn-ghost text-xl normal-case h-auto">
-            <Image className="rounded-lg "src={logo} alt="Pierce-Tech logo" height="60" width="120" />
+            <Image
+              className="rounded-lg "
+              src={logo}
+              alt="Pierce-Tech logo"
+              height="60"
+              width="120"
+            />
             Pierce-Tech
           </Link>
         </div>
@@ -41,12 +52,12 @@ export default  async function Navbar() {
               />
             </div>
           </form>
-          <ShoppingCartButton cart={cart}/>
+          <ShoppingCartButton cart={cart} />
+          <UserMenuButton session={session} />
         </div>
       </div>
     </div>
   );
 }
-
 
 // in form action we can just add the url of the query page that we created but that will cause the page to reload which isnt the best user experience the way we did it happens more subtely and allows for a smooth transition maintaining all the things saved on state and our activities as of far.

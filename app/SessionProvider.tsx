@@ -1,5 +1,3 @@
-"use client "
-import React from 'react'
+"use client ";
 
-
-export {SessionProvider as default } from 'next-auth/react'
+export { SessionProvider as default } from "next-auth/react";
