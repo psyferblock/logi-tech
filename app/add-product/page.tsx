@@ -15,6 +15,12 @@ export const metadata = {
 // add product function
 async function addProduct(formData: FormData) {
   "use server";
+
+  const session=await getServerSession(authOptions)
+  if (!session){
+    // the question mark indicates wehre we want to  direct after signin. then we add = to send it to wehre we want after the callbackUrl is set.
+    redirect("api/auth/signin?callbackUrl=/add-product")
+  }
   const name = formData.get("name")?.toString();
   const description = formData.get("description")?.toString();
   const imageUrl = formData.get("imageUrl")?.toString();
