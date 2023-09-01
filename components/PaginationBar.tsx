@@ -48,9 +48,9 @@ function PaginationBar({
           </Link>
         )}
       </div>
-      <div className="join hidden sm:block ">{numberedPageItems}</div>;
+      <div className="join hidden sm:block ">{numberedPageItems}</div>
     </>
-  );
+  )
 }
 
 export default PaginationBar;
