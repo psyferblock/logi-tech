@@ -32,21 +32,38 @@ export async function getCart(): Promise<ShoppingCartType | null> {
   // const getCart=await prisma.cart.findUnique({
   //     id:id
   // })
+  const session = await getServerSession(authOptions);
 
-  // storing cart in cookie method
-  const localCartId = cookies().get("localCartId")?.value;
-  const cart = localCartId
-    ? await prisma.cart.findUnique({
-        where: { id: localCartId },
-        include: {
-          items: {
-            include: {
-              product: true,
-            },
+  let cart: cartWithProducts | null = null;
+
+  if (session) {
+    cart = await prisma.cart.findFirst({
+      where: { userId: session.user.id },
+      include: {
+        items: {
+          include: {
+            product: true,
           },
-        }, // looking at the models in the schema we are finding the cart id to include the items which are the id of the products we need. so since the end result is the products we end up diving deeper into the relationship we have with the models and getting exactly what we want .
-      })
-    : null;
+        },
+      },
+    });
+  } else {
+    // storing cart in cookie method
+    const localCartId = cookies().get("localCartId")?.value;
+
+    cart = localCartId
+      ? await prisma.cart.findUnique({
+          where: { id: localCartId },
+          include: {
+            items: {
+              include: {
+                product: true,
+              },
+            },
+          }, // looking at the models in the schema we are finding the cart id to include the items which are the id of the products we need. so since the end result is the products we end up diving deeper into the relationship we have with the models and getting exactly what we want .
+        })
+      : null;
+  }
   if (!cart) {
     return null;
   }
@@ -64,13 +81,22 @@ export async function getCart(): Promise<ShoppingCartType | null> {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CREATE CART FUNCTION
 export async function createCart(): Promise<ShoppingCartType> {
-const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions);
 
-let newCart:Cart;
-   newCart = await prisma.cart.create({
-    data: {},
-  });
-
+  let newCart: Cart;
+  // if there is a session it creates a cart connected to this user
+  // if no user it creates cart anonymously
+  if (session) {
+    newCart = await prisma.cart.create({
+      data: {
+        userId: session.user.id,
+      },
+    });
+  } else {
+    newCart = await prisma.cart.create({
+      data: {},
+    });
+  }
   // needs encryption and secure settings in production
   cookies().set("localCartId", newCart.id);
   return {
