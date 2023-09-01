@@ -81,7 +81,7 @@ export async function getCart(): Promise<ShoppingCartType | null> {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CREATE CART FUNCTION
 export async function createCart(): Promise<ShoppingCartType> {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions); //Note: good to know that the cookies and getServerSession will always dynamically load meaning the page will not be cached since every user has his own data to be transfered.
 
   let newCart: Cart;
   // if there is a session it creates a cart connected to this user
@@ -187,6 +187,7 @@ export async function mergeAnonymousCartIntoUserCart(userId: string) {
     await tx.cart.delete({
       where: { id: localCart.id },
     });
+
     cookies().set("localCartId","")
   });
 

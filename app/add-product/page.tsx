@@ -26,17 +26,16 @@ async function addProduct(formData: FormData) {
   const imageUrl = formData.get("imageUrl")?.toString();
   const price = Number(formData.get("price") || 0);
 
-  console.log("formData", formData.keys());
-  console.log("formData.values(", formData.values());
-
   if (!name || !description || !imageUrl || !price) {
     throw Error("missing required credentials");
   }
 
+ 
   await prisma.product.create({
     data: { name, description, imageUrl, price },
   });
-  redirect("/add-product");
+  
+  redirect("/");
   
 }
 async function AddProductPage() {
