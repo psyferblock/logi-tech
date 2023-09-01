@@ -1,4 +1,4 @@
-import { Cart, Prisma } from "@prisma/client";
+import { Cart, CartItem, Prisma } from "@prisma/client";
 import { prisma } from "./prisma";
 import { cookies } from "next/dist/client/components/headers";
 import { getServerSession } from "next-auth";
@@ -119,3 +119,98 @@ export async function createCart(): Promise<ShoppingCartType> {
 // prisma supports us with the models we created so it creates some types for us to utilise.
 // the first type is extracted from Prisma itself where we add the return object itself and prisma makes the type for us .
 //the second type "ShoppingCartType" adds to the previous type the object values we added.
+
+// THIS FUNCTION ALLOWS THE ANONYMOUS CART TO BE TRANSFERED UNDER THE USER ID WHEN THE USER SIGNS IN.
+// so technically we have to transfer the cookie from anonymous to the user
+// and insert the user id from the login to the cart
+export async function mergeAnonymousCartIntoUserCart(userId: string) {
+  // fetch local cart
+  const localCartId = cookies().get("localCartId")?.value;
+
+  // fetch local cart from DB
+  // remember this is a ternary operator where we check if there is a localCartId and if it doesnt exist localCart will return null.
+  const localCart = localCartId
+    ? await prisma.cart.findUnique({
+        where: { id: localCartId },
+        // the reason we didnt include the products because we wont need it for the merge. all we want is the product id.
+        include: {
+          items: true,
+        },
+      })
+    : null;
+
+  // if there is no local cart then we return normally for hte next step is to call the user cart
+  if (!localCart) return;
+
+  // we call the user cart if there is any from the database.
+  const userCart = await prisma.cart.findFirst({
+    where: { userId },
+    include: { items: true },
+  });
+
+  // at this moment we have both carts the local and the user and will have to make several db operations to merge them.
+  // for this we have to create a DB transaction in order to make sure that any changes on the ui will not effect our data
+
+  // execute transaction in prisma
+  // in the $transaction function we pass an arrow function to execute the logic needed for hte transaciton
+  await prisma.$transaction(async (tx) => {
+    if (userCart) {
+      const mergedCartItems = mergeCartItems(localCart.items, userCart.items);
+      // next step is deleting the items in carts and using the mergedCartItems instead
+      await tx.cartItem.deleteMany({
+        where: { cartId: userCart.id },
+      });
+      await tx.cartItem.createMany({
+        data: mergedCartItems.map((item) => ({
+          cartId: userCart.id, // we use the userCartId to replace the cartID htat existed so we maintain that cart.
+          productId: item.productId,
+          quantity: item.quantity,
+        })),
+      });
+      //the else is for if the user didnt have a cart so we create one
+    } else {
+      await tx.cart.create({
+        data: {
+          userId: userId,
+          items: {
+            // this is a prisma relationship query.
+            createMany: {
+              data: localCart.items.map((item) => ({
+                productId: item.productId,
+                quantity: item.quantity,
+              })),
+            },
+          },
+        },
+      });
+    }
+    await tx.cart.delete({
+      where: { id: localCart.id },
+    });
+    cookies().set("localCartId","")
+  });
+
+  // merging
+}
+
+// function that contains the logic to merge the items
+
+// the ...cartitems destructures all the cart items we have
+// we give it the type cartItem[][] the first array because its an array of items and the second array means it could be multiple arrays in an array
+function mergeCartItems(...cartItems: CartItem[][]) {
+  // take each entry and combine them together adding quantity and add items from anonymous cart into user cart
+  // the reduce funciton takes 2 parameters which is the function and initial state. the function takes what ever is fed into it ( here its cart items) and splits them into the afunction that does stuff to the items and hte items themselves extracted ultimately to retun something completed. in our case its the newe cartItem object which has the cart items as an array with the wuantity of each items.
+  return cartItems.reduce((accumulator, items) => {
+    items.forEach((item) => {
+      const existingItem = accumulator.find(
+        (i) => i.productId === item.productId
+      );
+      if (existingItem) {
+        existingItem.quantity += item.quantity;
+      } else {
+        accumulator.push(item);
+      }
+    });
+    return accumulator;
+  }, [] as CartItem[]); // note the [] as CartItem here explains the initial state of the empty array that has type cartItemwhich is an object of {productid,cartId,quantity,id}
+}
