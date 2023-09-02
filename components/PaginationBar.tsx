@@ -21,7 +21,7 @@ function PaginationBar({
   for (let page = minPage; page <= maxPage; page++) {
     numberedPageItems.push(
       <Link
-        href={"?pages=" + page}
+        href={"?page=" + page}
         key={page}
         className={`join-item btn ${
           currentPage === page ? "btn-active pointer-events-none " : ""
@@ -33,9 +33,10 @@ function PaginationBar({
   }
   return (
     <>
+      <div className="join hidden sm:block ">{numberedPageItems}</div>
       <div className="join block sm:hidden ">
         {currentPage > 1 && (
-          <Link href={"?pages=" + (currentPage - 1)} className="btn join-item">
+          <Link href={"?page=" + (currentPage - 1)} className="btn join-item">
             «
           </Link>
         )}
@@ -48,9 +49,8 @@ function PaginationBar({
           </Link>
         )}
       </div>
-      <div className="join hidden sm:block ">{numberedPageItems}</div>
     </>
-  )
+  );
 }
 
 export default PaginationBar;

@@ -12,7 +12,6 @@ interface homePropsInterface {
 export default async function Home({
   searchParams: { page = "1" },
 }: homePropsInterface) {
-
   const currentPage = parseInt(page);
 
   const pageSize = 6;
@@ -47,7 +46,7 @@ export default async function Home({
               <h1 className="text-5xl font-bold ">{products[0].name}</h1>
               <h2 className="py-6 ">{products[0].description}</h2>
               <Link
-                href={"/product/" + products[0].id}
+                href={"/products/" + products[0].id}
                 className="btn-primary btn"
               >
                 check it out{" "}
@@ -58,11 +57,9 @@ export default async function Home({
       )}
       <div className="my-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
         {/* under us we use a ternary operator to establish the variable we need to use for the mapping. because our hero item is one that only shows on the first page  */}
-        {
-        (currentPage === 1 ? products.slice(1) : products).map((product) => (
+        {(currentPage === 1 ? products.slice(1) : products).map((product) => (
           <ProductCard product={product} key={product.id} />
-        ))
-        }
+        ))}
       </div>
       {totalPages > 1 && (
         <PaginationBar currentPage={currentPage} totalPages={totalPages} />

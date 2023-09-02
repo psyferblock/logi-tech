@@ -11,7 +11,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 
 async function searchProducts(formData: FormData) {
   "use server";
-  const searchQuery = formData.get("searcQuery")?.toString();
+  const searchQuery = formData.get("searchQuery")?.toString();
   if (searchQuery) {
     // were redirecting to a search page with a query ontop. to get us all the data we need regarding our search. this seems simple enough for hte preliminary search maybe this allows us to engage with teh db from the server side in a much smoother way.
     redirect("/search?query=" + searchQuery);
@@ -42,7 +42,7 @@ export default async function Navbar() {
         </div>
         <div className="flex-none gap-2">
           {/* the form is used for hte search bar  */}
-          <form action="searchProducts">
+          <form action={searchProducts}>
             <div className="form-control">
               <input
                 type="text"
