@@ -11,7 +11,7 @@ export function generateMetadata({
     searchParams: { query },
   }: SearchPagePropsI): Metadata {
     return {
-      title: `Search: ${query} - Flowmazon`,
+      title: `Search: ${query} - Pierce-Tech`,
     };
   }
 async function page({ searchParams: { query } }: SearchPagePropsI) {
