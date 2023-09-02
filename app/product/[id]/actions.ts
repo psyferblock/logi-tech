@@ -14,19 +14,51 @@ export async function incrementProductQuantity(productId: string) {
 
   // find if article already in cart.
   const articleInCart = cart.items.find((item) => item.productId === productId);
+
   if (articleInCart) {
-    await prisma.cartItem.update({
-      where: { id: articleInCart.id },
-      data: { quantity: { increment: 1 } },
-    });
-  }else {
-    await prisma.cartItem.create({
+    //relation query for update 
+    await prisma.cart.update({
+      where :{id:cart.id},
       data:{
-        cartId:cart.id,
-        productId,
-        quantity:1
+        items:{
+          update:{
+            where: { id: articleInCart.id },
+      data: { quantity: { increment: 1 } },
+          }
+        }
       }
     })
+  
+    // old operation foe comparison
+  
+    // await prisma.cartItem.update({
+    //   where: { id: articleInCart.id },
+    //   data: { quantity: { increment: 1 } },
+    // });
+  }else {
+
+    // relational query for create
+    await prisma.cart.update({
+      where :{id:cart.id},
+      data:{
+        items:{
+          create:{
+              productId,
+              quantity:1
+            }
+        }
+      }
+    })
+
+    // old query 
+    
+    // await prisma.cartItem.create({
+    //   data:{
+    //     cartId:cart.id,
+    //     productId,
+    //     quantity:1
+    //   }
+    // })
   }
   //in server actions this refreshes the cach of the path you want to fetch 
 //   note that this is the path we have in our file structure not hte URL ( GOOD THING TO  RECOGNISE)

@@ -160,13 +160,36 @@ export async function mergeAnonymousCartIntoUserCart(userId: string) {
       await tx.cartItem.deleteMany({
         where: { cartId: userCart.id },
       });
-      await tx.cartItem.createMany({
-        data: mergedCartItems.map((item) => ({
-          cartId: userCart.id, // we use the userCartId to replace the cartID htat existed so we maintain that cart.
-          productId: item.productId,
-          quantity: item.quantity,
-        })),
-      });
+
+      // create many
+
+      // relationship query for createMany 
+      await tx.cart.update({
+        where:{id:userCart.id},
+        data:{
+          items:{
+            createMany:{
+              data: mergedCartItems.map((item) => ({
+                // since were doing the operations on the userCartId we dont really need it in the data for the 
+                productId: item.productId,
+                quantity: item.quantity,
+              })),
+            }
+          },
+          // NOTE :we still have to update the updatedAt every time we make an operation but there is a solution using the prisma.ts file 
+        }
+      })
+      // old operation for create Many 
+
+      // await tx.cartItem.createMany({
+      //   data: mergedCartItems.map((item) => ({
+      //     cartId: userCart.id, // we use the userCartId to replace the cartID htat existed so we maintain that cart.
+      //     productId: item.productId,
+      //     quantity: item.quantity,
+      //   })),
+      // });
+
+
       //the else is for if the user didnt have a cart so we create one
     } else {
       await tx.cart.create({

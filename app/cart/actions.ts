@@ -15,26 +15,74 @@ export async function setProductQuantity(productId: string, quantity: number) {
 
   if (quantity === 0) {
     if (articleInCart) {
-      await prisma.cartItem.delete({
-        where: {
-          id: articleInCart.id,
-        },
-      });
+
+      // relation query for delete 
+        await prisma.cart.update({
+          where:{
+            id:cart.id
+          },
+          data:{
+            items:{
+              delete:{id:articleInCart.id}
+            }
+          }
+        })
+      // normal query for delete 
+
+      // await prisma.cartItem.delete({
+      //   where: {
+      //     id: articleInCart.id,
+      //   },
+      // });
     }
   } else {
     if (articleInCart) {
-      await prisma.cartItem.update({
-        where: { id: articleInCart.id },
-        data: { quantity },
-      });
+
+      // relation query for upadate
+      await prisma.cart.update({
+        where:{id:cart.id},
+        data:{
+          items:{
+            update:{
+              where:{id:articleInCart.id},
+              data:{
+                quantity
+              }
+            }
+          }
+        }
+      })
+
+      // normal query for update
+
+      // await prisma.cartItem.update({
+      //   where: { id: articleInCart.id },
+      //   data: { quantity },
+      // });
     } else {
-      await prisma.cartItem.create({
-        data: {
-          cartId: cart.id,
-          productId,
-          quantity,
-        },
-      });
+      
+      //relation query for create
+      await prisma.cart.update({
+        where:{id:cart.id},
+        data:{
+          items:{
+            create:{
+              productId,
+              quantity,
+            }
+          }
+        }
+      })
+
+      // normal query for create 
+
+      // await prisma.cartItem.create({
+      //   data: {
+      //     cartId: cart.id,
+      //     productId,
+      //     quantity,
+      //   },
+      // });
     }
   }
   revalidatePath("/cart");
